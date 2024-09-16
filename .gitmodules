@@ -1,0 +1,12 @@
+[submodule "modules/modules/tortoise_tts_api"]
+	path = modules/modules/tortoise_tts_api
+	url = https://github.com/JarodMica/tortoise-tts
+[submodule "modules/tortoise_tts_api"]
+	path = modules/tortoise_tts_api
+	url = https://github.com/JarodMica/tortoise-tts
+[submodule "modules/dlas"]
+	path = modules/dlas
+	url = https://github.com/JarodMica/DL-Art-School
+[submodule "modules/tortoise_tts"]
+	path = modules/tortoise_tts
+	url = https://github.com/JarodMica/tortoise-tts
