@@ -1,0 +1,23 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "tortoise-tts-api"
+version = "1.0"
+description = "Installable package for tortoise tts"
+authors = [
+    { name = "Jarod Mica" }
+]
+
+requires-python = ">=3.9"
+
+[project.urls]
+repository = "https://github.com/JarodMica/tortoise_tts_api"
+
+[tool.setuptools.packages.find]
+where = [".", "modules"]
+include = [
+    "tortoise_tts_api",
+    "tortoise_tts_api.*"
+]

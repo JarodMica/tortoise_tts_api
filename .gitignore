@@ -1,0 +1,8 @@
+build/
+*.egg-info
+venv/
+models/
+results/
+voices/
+.vscode/
+*__pycache__
