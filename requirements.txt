@@ -1,0 +1,2 @@
+numpy==1.26.4
+deepspeed==0.15.0

@@ -1,0 +1,1 @@
+deepspeed - Well, deepspeed can natively be installed on windows nowadays, but user needs to be aware that the will need cuda toolkit: https://developer.nvidia.com/cuda-12-1-0-download-archive?target_os=Windows&target_arch=x86_64&target_version=11&target_type=exe_local
