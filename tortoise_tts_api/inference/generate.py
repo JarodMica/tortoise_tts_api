@@ -56,7 +56,8 @@ def generate(
     seed=-1,
     temperature=0.8,
     top_p=0.9,
-    num_autoregressive_samples=4,
+    num_autoregressive_samples=2,
+    sample_batch_size=None,
     diffusion_iterations=25,
     diffusion_temperature=1.0,
     cvvp_weight=0.0,
@@ -69,7 +70,8 @@ def generate(
     breathing_room=8,
     emotion=None,
     prompt=None,
-    use_hifigan=False  # Added this flag
+    use_hifigan=False,  # Added this flag
+    audio_path=None
 ):
     """
     Generates audio using the loaded TTS models.
@@ -108,7 +110,7 @@ def generate(
         'repetition_penalty': repetition_penalty,
         'cond_free_k': cond_free_k,
         'num_autoregressive_samples': num_autoregressive_samples,
-        'sample_batch_size': None,  # Auto-inferred in Tortoise
+        'sample_batch_size': sample_batch_size,  # Auto-inferred in Tortoise
         'diffusion_iterations': diffusion_iterations,
         'voice_samples': None,
         'conditioning_latents': None,
@@ -121,6 +123,13 @@ def generate(
         'cond_free': "Conditioning-Free" in experimentals,
         'cvvp_amount': cvvp_weight
     }
+    
+    # This block is necessary - by default tortoise infers AR_batch_size based on VRAM available
+    # If that value is larger than num_AR_samples requested by user, you'll run into errors
+    if not settings['sample_batch_size']:
+        settings['sample_batch_size'] = tts.autoregressive_batch_size
+    if settings['num_autoregressive_samples'] < settings['sample_batch_size']:
+        settings['sample_batch_size'] = settings['num_autoregressive_samples']
 
     # Fetch voice samples and conditioning latents
     def fetch_voice(voice):
@@ -172,7 +181,8 @@ def generate(
 
     outdir = os.path.join("results", voice)
     os.makedirs(outdir, exist_ok=True)
-    outfile = os.path.join(outdir, f'{cleanup_voice_name(voice)}_output.wav')
+    if not audio_path:
+        audio_path = os.path.join(outdir, f'{cleanup_voice_name(voice)}_output.wav')
 
     audio_cache = {}
     output_volume = 1.0
@@ -218,7 +228,7 @@ def generate(
         audio_cache[name] = {'audio': audio}
 
         # Save the audio file
-        torchaudio.save(outfile, audio, tts.output_sample_rate)
+        torchaudio.save(audio_path, audio, tts.output_sample_rate)
 
         # Save latents after saving audio
         if voice in ["random", "microphone"]:
@@ -237,6 +247,6 @@ def generate(
         if volume_adjust is not None:
             audio = volume_adjust(audio)
         audio_cache[k]['audio'] = audio
-        torchaudio.save(outfile, audio, output_rate)
+        torchaudio.save(audio_path, audio, output_rate)
 
-    return outfile
+    return audio_path

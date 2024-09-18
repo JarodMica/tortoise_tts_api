@@ -16,6 +16,8 @@ def load_tts(
 ):
     """
     Loads the TTS models and returns a `tts` object.
+    
+    autorgressive_batch_size must match t
     """
     tts_loading = True
 
@@ -40,7 +42,7 @@ def load_tts(
             vocoder_model=vocoder_name,
             tokenizer_json=tokenizer_json_path,
             unsqueeze_sample_batches=unsqueeze_sample_batches,
-            use_deepspeed=use_deepspeed
+            use_deepspeed=use_deepspeed,
         )
 
     print("Loaded TTS, ready for generation.")
