@@ -71,7 +71,8 @@ def generate(
     emotion=None,
     prompt=None,
     use_hifigan=False,  # Added this flag
-    audio_path=None
+    audio_path=None,
+    extra_voice_dirs=[]
 ):
     """
     Generates audio using the loaded TTS models.
@@ -147,7 +148,7 @@ def generate(
             voice_samples, conditioning_latents = None, tts.get_random_conditioning_latents()
         else:
             voice_samples, conditioning_latents = tortoise.utils.audio.load_voice(
-                voice, model_hash=tts.autoregressive_model_hash
+                voice, extra_voice_dirs=extra_voice_dirs, model_hash=tts.autoregressive_model_hash
             )
 
         if voice_samples and len(voice_samples) > 0:
