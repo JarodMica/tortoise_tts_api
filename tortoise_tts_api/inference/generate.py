@@ -156,10 +156,15 @@ def generate(
                 conditioning_latents = tts.get_conditioning_latents(
                     voice_samples=voice_samples, slices=1
                 )
+            if extra_voice_dirs:
+                # implicit assumption that I'm only passing 1 extra voice dir
+                outfile = os.path.join(extra_voice_dirs[0], voice, f'cond_latents_{tts.autoregressive_model_hash[:8]}.pth')
+            else:
                 outfile = os.path.join(get_voice_dir(), voice, f'cond_latents_{tts.autoregressive_model_hash[:8]}.pth')
-                os.makedirs(os.path.dirname(outfile), exist_ok=True)
-                torch.save(conditioning_latents, outfile)
-                print(f'Saved voice latents: {outfile}')
+
+            os.makedirs(os.path.dirname(outfile), exist_ok=True)
+            torch.save(conditioning_latents, outfile)
+            print(f'Saved voice latents: {outfile}')
 
             sample_voice = torch.cat(voice_samples, dim=-1).squeeze().cpu()
             voice_samples = None
